@@ -10,11 +10,9 @@
   <!-- Header -->
   <header>
     <div class="logo-banner-container">
-      <!-- โลโก -->
       <div class="logo">
         <img src="NextGen.png" alt="โลโกของ NextGen" id="logo">
       </div>
-      <!-- ชื่อพรรค และแบนเนอร์ -->
       <div class="banner">
         <h1>NextGen</h1>
       </div>
@@ -27,52 +25,16 @@
       <h2>ส่งความคิดเห็นของคุณ</h2>
       <form id="feedback-form">
         <textarea id="feedback" placeholder="เขียนความคิดเห็นของคุณที่นี่..." required></textarea>
-        <button type="button" id="submit-feedback">ส่งความคิดเห็น</button>
+        <button type="submit">ส่งความคิดเห็น</button>
       </form>
+      <p id="status" style="margin-top: 10px;"></p>
     </section>
+
+    <a href="admin.html">
+      <button style="margin-top: 20px;">ไปที่หน้าจัดการความคิดเห็น</button>
+    </a>
   </main>
 
-  <script>
-  const feedbackForm = document.getElementById('feedback-form');
-  const feedbackInput = document.getElementById('feedback');
-  const usedIds = new Set();
-
-  function generateRandomUniqueId() {
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let id;
-    do {
-      id = "#";
-      for (let i = 0; i < 6; i++) {
-        id += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-    } while (usedIds.has(id));
-    usedIds.add(id);
-    return id;
-  }
-
-  // เชื่อมต่อ Event Listener
-  document.getElementById('submit-feedback').addEventListener('click', function () {
-    const feedback = feedbackInput.value.trim();
-    if (!feedback) {
-      alert('กรุณาเขียนความคิดเห็นก่อนส่ง!');
-      return;
-    }
-
-    const id = generateRandomUniqueId();
-    const timestamp = new Date().toISOString();
-    const data = { feedback, timestamp };
-
-    try {
-      localStorage.setItem(id, JSON.stringify(data));
-      alert('ส่งความคิดเห็นเรียบร้อยแล้ว!');
-      feedbackInput.value = ''; // ล้างข้อความในฟอร์ม
-    } catch (error) {
-      alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล: ' + error.message);
-    }
-  });
-</script>
-     <a href="adminarnetgen68xnxx.html">
-        <button>ไปที่หน้าอื่น</button>
-      </a>
+  <script src="script.js"></script>
 </body>
 </html>
