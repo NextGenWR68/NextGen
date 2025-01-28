@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextGen - Comment Page</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Welcome to NextGen</h1>
+    <p>Share your thoughts and feedback</p>
+  </header>
+
+  <main>
+    <textarea id="commentBox" placeholder="Write your comment here..."></textarea>
+    <button id="submitBtn">Submit</button>
+
+    <div id="commentSection">
+      <h2>Comments:</h2>
+      <ul id="commentsList"></ul>
+    </div>
+  </main>
+
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
