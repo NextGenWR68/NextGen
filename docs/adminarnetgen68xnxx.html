@@ -23,9 +23,22 @@
   <main>
     <section>
       <h2>ลบความคิดเห็น</h2>
-      <button type="button" id="delete-selected">ลบความคิดเห็นที่เลือก</button>
+      <div>
+       <input type="text" id="search-box" placeholder="ค้นหา...">
+       <button id="delete-selected">ลบความคิดเห็นที่เลือก</button>
+      </div>
+      <table id="comments-table">
+       <thead>
+        <tr>
+         <th>เลือก</th>
+         <th>ID</th>
+         <th>ความคิดเห็น</th>
+         <th>วันที่</th>
+        </tr>
+       </thead>
+       <tbody></tbody>
+      </table>
     </section>
-
     <section>
       <h2>ค้นหาความคิดเห็น</h2>
       <input type="text" id="search-box" placeholder="ค้นหาคำที่ต้องการ...">
