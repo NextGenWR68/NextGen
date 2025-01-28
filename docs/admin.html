@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextGen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo-banner-container">
+      <div class="logo">
+        <img src="NextGen.png" alt="โลโกของ NextGen" id="logo">
+      </div>
+      <div class="banner">
+        <h1>NextGen</h1>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section>
+      <h2>ลบความคิดเห็น</h2>
+      <button type="button" id="delete-selected">ลบความคิดเห็นที่เลือก</button>
+    </section>
+
+    <section>
+      <h2>ค้นหาความคิดเห็น</h2>
+      <input type="text" id="search-box" placeholder="ค้นหาคำที่ต้องการ...">
+      <table>
+        <thead>
+          <tr>
+            <th>เลือก</th>
+            <th>รหัสความคิดเห็น</th>
+            <th>ความคิดเห็น</th>
+            <th>วันและเวลา</th>
+          </tr>
+        </thead>
+        <tbody id="comments-table">
+          <tr>
+            <td colspan="4" style="text-align: center;">ไม่มีข้อมูลความคิดเห็น</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const commentsTable = document.getElementById('comments-table');
+    const searchBox = document.getElementById('search-box');
+    const deleteSelectedButton = document.getElementById('delete-selected');
+    const usedIds = new Set();
+
+    function generateRandomUniqueId() {
+      const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let id;
+      do {
+        id = "#";
+        for (let i = 0; i < 6; i++) {
+          id += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+      } while (usedIds.has(id));
+      usedIds.add(id);
+      return id;
+    }
+
+    function loadComments() {
+      const keys = Object.keys(localStorage);
+      commentsTable.innerHTML = '';
+
+      if (keys.length === 0) {
+        commentsTable.innerHTML = '<tr><td colspan="4" style="text-align: center;">ไม่มีข้อมูลความคิดเห็น</td></tr>';
+        return;
+      }
+
+      const allComments = keys.map(key => {
+        const commentData = JSON.parse(localStorage.getItem(key));
+        return {
+          id: key,
+          feedback: commentData.feedback,
+          timestamp: new Date(commentData.timestamp),
+        };
+      }).sort((a, b) => b.timestamp - a.timestamp);
+
+      allComments.forEach(comment => {
+        const row = commentsTable.insertRow();
+        row.innerHTML = `
+          <td><input type="checkbox" class="select-comment" data-id="${comment.id}"></td>
+          <td>${comment.id}</td>
+          <td>${comment.feedback}</td>
+          <td>${comment.timestamp.toLocaleString()}</td>
+        `;
+      });
+    }
+
+    searchBox.addEventListener('input', function () {
+      const searchTerm = searchBox.value.toLowerCase();
+      const rows = commentsTable.getElementsByTagName('tr');
+      Array.from(rows).forEach(row => {
+        const feedbackText = row.cells[2]?.textContent.toLowerCase() || '';
+        row.style.display = feedbackText.includes(searchTerm) ? '' : 'none';
+      });
+    });
+
+    deleteSelectedButton.addEventListener('click', function () {
+      const selectedCheckboxes = document.querySelectorAll('.select-comment:checked');
+      if (selectedCheckboxes.length === 0) {
+        alert('กรุณาเลือกความคิดเห็นที่ต้องการลบ!');
+        return;
+      }
+
+      const confirmDelete = confirm('คุณต้องการลบความคิดเห็นที่เลือกหรือไม่?');
+      if (!confirmDelete) return;
+
+      selectedCheckboxes.forEach(checkbox => {
+        const commentId = checkbox.getAttribute('data-id');
+        if (localStorage.getItem(commentId)) {
+          localStorage.removeItem(commentId);
+        }
+      });
+
+      alert('ความคิดเห็นที่เลือกถูกลบแล้ว!');
+      loadComments();
+    });
+
+    loadComments();
+  </script>
+</body>
+</html>
