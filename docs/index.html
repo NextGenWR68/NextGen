@@ -37,6 +37,92 @@
   <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"></script>
 
-  <script src="script.js"></script>
+  <script>// Import Firebase SDK
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue, remove } from "firebase/database";
+
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyDcy2qrz2NH-EJ9YIfcZphSXiaG2vXiBPs",
+  authDomain: "nextgen-wr682.firebaseapp.com",
+  databaseURL: "https://nextgen-wr682-default-rtdb.firebaseio.com",
+  projectId: "nextgen-wr682",
+  storageBucket: "nextgen-wr682.appspot.com",
+  messagingSenderId: "611384552127",
+  appId: "1:611384552127:web:b51d2c19a54fe9201bb40a",
+  measurementId: "G-4XDQB8WDER",
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+// DOM Elements
+const commentsTable = document.getElementById("comments-table");
+const deleteSelectedButton = document.getElementById("delete-selected");
+
+// Load Comments from Firebase
+const loadComments = () => {
+  if (!commentsTable) return;
+
+  const feedbackRef = ref(database, "feedbacks/");
+  onValue(feedbackRef, (snapshot) => {
+    const feedbacks = snapshot.val();
+    commentsTable.innerHTML = "";
+
+    if (!feedbacks) {
+      commentsTable.innerHTML =
+        '<tr><td colspan="4" style="text-align: center;">ไม่มีความคิดเห็น</td></tr>';
+      return;
+    }
+
+    Object.keys(feedbacks).forEach((key) => {
+      const feedbackData = feedbacks[key];
+      const row = commentsTable.insertRow();
+      row.innerHTML = `
+        <td><input type="checkbox" class="select-comment" data-id="${key}"></td>
+        <td>${key}</td>
+        <td>${feedbackData.feedback}</td>
+        <td>${new Date(feedbackData.timestamp).toLocaleString()}</td>
+      `;
+    });
+  });
+};
+
+// Delete Selected Feedbacks
+if (deleteSelectedButton) {
+  deleteSelectedButton.addEventListener("click", () => {
+    const selectedCheckboxes = document.querySelectorAll(
+      ".select-comment:checked"
+    );
+
+    if (selectedCheckboxes.length === 0) {
+      alert("กรุณาเลือกความคิดเห็นที่ต้องการลบ!");
+      return;
+    }
+
+    const confirmDelete = confirm("คุณต้องการลบความคิดเห็นที่เลือกหรือไม่?");
+    if (!confirmDelete) return;
+
+    selectedCheckboxes.forEach((checkbox) => {
+      const feedbackId = checkbox.getAttribute("data-id");
+      const feedbackRef = ref(database, `feedbacks/${feedbackId}`);
+      remove(feedbackRef)
+        .then(() => {
+          console.log(`ความคิดเห็น ${feedbackId} ถูกลบเรียบร้อย`);
+        })
+        .catch((error) => {
+          console.error("เกิดข้อผิดพลาดในการลบความคิดเห็น:", error);
+        });
+    });
+
+    alert("ความคิดเห็นที่เลือกถูกลบแล้ว!");
+    loadComments();
+  });
+}
+
+// Initial Load
+document.addEventListener("DOMContentLoaded", loadComments);
+</script>
 </body>
 </html>
