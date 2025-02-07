@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - เพิ่มข่าวสาร</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <h2>เพิ่มข่าวสาร</h2>
+    <form id="newsForm">
+        <label>หัวข้อข่าว:</label>
+        <input type="text" id="title" required>
+        
+        <label>รายละเอียดข่าว:</label>
+        <textarea id="content" required></textarea>
+        
+        <label>URL รูปภาพ:</label>
+        <input type="text" id="imageUrl" placeholder="https://...">
+        
+        <button type="submit">บันทึกข่าวสาร</button>
+    </form>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>
